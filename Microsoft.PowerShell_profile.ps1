@@ -8,7 +8,8 @@ $modulesAImporter = @(
 foreach ($module in $modulesAImporter) {
     if (Get-Module -ListAvailable -Name $module) {
         Import-Module $module
-    } else {
+    }
+    else {
         Write-Warning "Le module $module n'est pas installé. Utilisez 'Install-Module $module' pour l'installer."
     }
 }
@@ -19,11 +20,11 @@ oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\catppuccin_macchiato.omp.js
 
 # Configure PSReadLine settings
 $psReadLineSettings = @{
-    EditMode = 'Emacs'
-    BellStyle = 'None'
-    PredictionSource = 'History'
+    EditMode                      = 'Emacs'
+    BellStyle                     = 'None'
+    PredictionSource              = 'History'
     HistorySearchCursorMovesToEnd = $true
-    PredictionViewStyle = 'ListView'
+    PredictionViewStyle           = 'ListView'
 }
 Set-PSReadLineOption @psReadLineSettings
 
@@ -46,23 +47,23 @@ $env:GIT_SSH = "C:\Windows\system32\OpenSSH\ssh.exe"
 
 # Define aliases
 $aliasesADefinir = @{
-    vim = 'nvim'
-    ll = 'ls'
-    g = 'git'
-    grep = 'findstr'
-    tig = 'C:\Program Files\Git\usr\bin\tig.exe'
-    less = 'C:\Program Files\Git\usr\bin\less.exe'
+    vim   = 'nvim'
+    ll    = 'ls'
+    g     = 'git'
+    grep  = 'findstr'
+    tig   = 'C:\Program Files\Git\usr\bin\tig.exe'
+    less  = 'C:\Program Files\Git\usr\bin\less.exe'
     touch = 'New-Item'
-    open = 'Invoke-Item'
-    mkcd = 'New-ItemAndEnter'
-    du = 'Get-DiskUsage'
-    ff = 'Find-File'
-    top = 'Get-TopProcesses'
-    bak = 'Backup-File'
-    nf = 'New-File'
-    lsd = 'Get-DetailedDirectory'
-    sh = 'Search-History'
-    oe = 'Open-Explorer'
+    open  = 'Invoke-Item'
+    mkcd  = 'New-ItemAndEnter'
+    du    = 'Get-DiskUsage'
+    ff    = 'Find-File'
+    top   = 'Get-TopProcesses'
+    bak   = 'Backup-File'
+    nf    = 'New-File'
+    lsd   = 'Get-DetailedDirectory'
+    sh    = 'Search-History'
+    oe    = 'Open-Explorer'
 }
 foreach ($alias in $aliasesADefinir.GetEnumerator()) {
     Set-Alias -Name $alias.Key -Value $alias.Value
@@ -81,6 +82,15 @@ function Get-PubIP {
     (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content 
 }
 
+# Fonction pour mettre à jour tous les paquets avec winget
+function Update {
+    winget upgrade --all --accept-package-agreements --accept-source-agreements
+}
+
+# Définir un alias pour la fonction de mise à jour
+Set-Alias -Name u -Value Update
+
+
 # Function to reload PowerShell profile
 function Update-Profile {
     . $PROFILE
@@ -95,7 +105,7 @@ function mkcd {
 
 # Function to get disk usage information
 function Get-DiskUsage {
-    Get-WmiObject Win32_LogicalDisk | Select-Object DeviceID, @{Name="Size(GB)";Expression={[math]::Round($_.Size/1GB,2)}}, @{Name="FreeSpace(GB)";Expression={[math]::Round($_.FreeSpace/1GB,2)}}
+    Get-WmiObject Win32_LogicalDisk | Select-Object DeviceID, @{Name = "Size(GB)"; Expression = { [math]::Round($_.Size / 1GB, 2) } }, @{Name = "FreeSpace(GB)"; Expression = { [math]::Round($_.FreeSpace / 1GB, 2) } }
 }
 
 # Function to find files by name
@@ -142,13 +152,13 @@ $global:ZDirs = @{}
 
 function z {
     param(
-        [Parameter(Position=0)]
+        [Parameter(Position = 0)]
         [string]$Directory
     )
 
     # If no directory is provided, display all tracked directories
     if (-not $Directory) {
-        $ZDirs.GetEnumerator() | Sort-Object Value -Descending | Format-Table @{l='Directory';e={$_.Key}}, @{l='Score';e={$_.Value}} -AutoSize
+        $ZDirs.GetEnumerator() | Sort-Object Value -Descending | Format-Table @{l = 'Directory'; e = { $_.Key } }, @{l = 'Score'; e = { $_.Value } } -AutoSize
         return
     }
 
@@ -163,7 +173,8 @@ function z {
     # Choose the target directory
     if ($matchingDirs.Count -eq 1) {
         $targetDir = $matchingDirs[0].FullName
-    } else {
+    }
+    else {
         $targetDir = $matchingDirs | Sort-Object { $ZDirs[$_.FullName] } -Descending | Select-Object -First 1 | Select-Object -ExpandProperty FullName
     }
 
@@ -171,7 +182,8 @@ function z {
     Set-Location $targetDir
     if ($ZDirs.ContainsKey($targetDir)) {
         $ZDirs[$targetDir]++
-    } else {
+    }
+    else {
         $ZDirs[$targetDir] = 1
     }
 }
@@ -182,7 +194,8 @@ Set-PSReadLineKeyHandler -Key Enter -ScriptBlock {
     $currentDir = (Get-Location).Path
     if ($ZDirs.ContainsKey($currentDir)) {
         $ZDirs[$currentDir]++
-    } else {
+    }
+    else {
         $ZDirs[$currentDir] = 1
     }
 }
