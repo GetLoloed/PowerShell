@@ -18,6 +18,11 @@ foreach ($module in $modulesAImporter) {
 $omp_config = Join-Path $PSScriptRoot ".\takuya.omp.json"
 oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\catppuccin_macchiato.omp.json" | Invoke-Expression
 
+# Enable automated upgrades for Oh-My-Posh
+$env:POSH_SETTINGS = @{
+    auto_upgrade = $true
+}
+
 # Configure PSReadLine settings
 $psReadLineSettings = @{
     EditMode                      = 'Emacs'
