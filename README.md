@@ -1,3 +1,25 @@
+# Install
+Clone the repository inside the `$PROFILE` directory (Documents/PowerShell)
+
+set the [nerd fonts](https://www.nerdfonts.com/font-downloads) in your terminal
+
+
+```
+# installing scoop
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+```
+
+# installing oh-my-posh
+```
+winget install JanDeDobbeleer.OhMyPosh -s winget
+```
+
+# installing fzf with scoop
+```
+scoop install fzf
+```
+
 
 # Custom PowerShell Configuration
 
